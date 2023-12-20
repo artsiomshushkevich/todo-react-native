@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export const AuthForm = () => {
+export const AuthForm = ({ onSubmit }) => {
     const [shouldSignUp, setShouldSignUp] = useState(false);
 
     return (
@@ -53,7 +53,11 @@ export const AuthForm = () => {
                     <Checkbox value={shouldSignUp} onValueChange={setShouldSignUp} />
                     <Text>Should sign up?</Text>
                 </View>
-                <Button title={shouldSignUp ? 'Sign up' : 'Log in'} style={styles.button} />
+                <Button
+                    onPress={onSubmit}
+                    title={shouldSignUp ? 'Sign up' : 'Log in'}
+                    style={styles.button}
+                />
             </View>
         </KeyboardAwareScrollView>
     );
