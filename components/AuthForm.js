@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import { BASE_AUTH_URL } from '../constants/urls';
+import { useDefaultHeadersWithToken } from '../hooks/useDefaultHeadersWithToken';
 
 const styles = StyleSheet.create({
     formContainer: {
@@ -24,11 +25,12 @@ const styles = StyleSheet.create({
     input: {
         width: 300,
         height: 60,
-        borderColor: 'gray',
+        borderColor: 'black',
         borderWidth: 1,
         borderRadius: 6,
         paddingStart: 8,
-        marginBottom: 16
+        marginBottom: 16,
+        fontSize: 16
     },
     errorContainer: {
         marginBottom: 16
@@ -39,26 +41,20 @@ const styles = StyleSheet.create({
         borderColor: 'red',
         borderRadius: 3,
         padding: 4
-    },
-    button: {
-        height: 60
     }
 });
 
 export const AuthForm = ({ onSubmit }) => {
+    const headers = useDefaultHeadersWithToken();
     const [shouldSignUp, setShouldSignUp] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const { isPending, isError, isSuccess, mutate, data, error } = useMutation({
+    const { isPending, isError, isSuccess, mutate, data } = useMutation({
         mutationFn: async ({ username, password }) => {
-            console.log('shouldSingUp', shouldSignUp);
-
             const response = await fetch(`${BASE_AUTH_URL}/${shouldSignUp ? 'signup' : 'login'}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers,
                 body: JSON.stringify({ username, password })
             });
 
@@ -118,7 +114,6 @@ export const AuthForm = ({ onSubmit }) => {
                     disabled={!isSubmissionEnabled}
                     onPress={handleSubmit}
                     title={shouldSignUp ? 'Sign up' : 'Log in'}
-                    style={styles.button}
                 />
             </View>
         </KeyboardAwareScrollView>

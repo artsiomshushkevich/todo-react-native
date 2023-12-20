@@ -8,5 +8,6 @@ export const HomeScreen = ({ navigation }) => {
         setToken(token);
         navigation.navigate('Todos');
     };
+
     return <AuthForm onSubmit={onSubmit} />;
 };
